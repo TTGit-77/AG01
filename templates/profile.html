@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+      <div class="profile-card card shadow-lg border-0 p-5 mx-auto mt-5" style="max-width: 500px; background: linear-gradient(120deg, #e3f0ff 70%, #f7fcff 100%);">
+        <div class="text-center mb-4">
+          <img src="https://img.icons8.com/fluency/64/user-male-circle.png" alt="Profile" class="mb-2">
+          <h2 class="fw-bold mb-1">@{{ current_user.username }}</h2>
+          <p class="text-gradient mb-0">Welcome to CineBook!</p>
+        </div>
+        <div class="mb-3">
+          <span class="fw-semibold">Username:</span> {{ current_user.username }}
+        </div>
+        <div class="mb-4">
+          <div class="row mb-2">
+            <div class="col-6 text-muted">Email</div>
+            <div class="col-6">{{ current_user.username }}@cinebook.com</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6 text-muted">Total Tickets Booked</div>
+            <div class="col-6 fw-bold">{{ total_tickets }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6 text-muted">Amount Spent</div>
+            <div class="col-6 fw-bold">₹{{ total_amount }}</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <a href="{{ url_for('my_bookings') }}" class="btn btn-gradient">View My Bookings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

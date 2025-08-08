@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-3">Book Seats for <span class="text-info">{{ showtime.movie.title }}</span></h2>
+<p><strong>Date:</strong> {{ showtime.show_date }} | <strong>Time:</strong> {{ showtime.show_time }} | <strong>Screen:</strong> {{ showtime.screen }}</p>
+<div class="bg-dark rounded-3 p-4 shadow-sm mb-4">
+    <form method="POST">
+        <div class="d-flex justify-content-center mb-3">
+            <div class="legend me-4"><span class="seat available"></span> Available</div>
+            <div class="legend me-4"><span class="seat selected"></span> Selected</div>
+            <div class="legend"><span class="seat booked"></span> Booked</div>
+        </div>
+        <div class="cinema-seats mx-auto mb-4" style="max-width:420px;">
+            {% set seats_per_row = 8 %}
+            {% for row in range(0, seat_numbers|length, seats_per_row) %}
+            <div class="d-flex justify-content-center mb-2">
+                {% for col in range(seats_per_row) %}
+                    {% set idx = row + col %}
+                    {% if idx < seat_numbers|length %}
+                        {% set seat = seat_numbers[idx] %}
+                        <div class="seat-wrap">
+                            <input type="checkbox" name="seats" id="seat{{ seat }}" value="{{ seat }}"
+                                class="seat-checkbox"
+                                {% if seat in booked %}disabled checked{% endif %}>
+                            <label class="seat-label seat {% if seat in booked %}booked{% endif %}" for="seat{{ seat }}">{{ seat }}</label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-gradient px-4 py-2">Book Selected Seats</button>
+        <a href="{{ url_for('movie_details', movie_id=showtime.movie_id) }}" class="btn btn-outline-light ms-2">Back</a>
+    </form>
+</div>
+<style>
+.cinema-seats {
+    background: #23272b;
+    border-radius: 1rem;
+    padding: 2rem 1rem 1rem 1rem;
+    box-shadow: 0 2px 16px 0 rgba(26,41,128,0.07);
+}
+.seat-wrap {
+    margin: 0 5px;
+    display: inline-block;
+}
+.seat-checkbox {
+    display: none;
+}
+.seat-label {
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0;
+    cursor: pointer;
+    background: #2b3a4a;
+    color: #fff;
+    border: 2px solid #263859;
+    transition: background .18s, color .18s, border .18s, box-shadow .18s;
+    box-shadow: 0 1px 4px 0 rgba(26,41,128,0.08);
+}
+.seat-label:hover:not(.booked) {
+    background: #26d0ce;
+    color: #181818;
+    border-color: #1a2980;
+}
+.seat-checkbox:checked + .seat-label:not(.booked) {
+    background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+    color: #fff;
+    border-color: #26d0ce;
+    box-shadow: 0 2px 8px 0 rgba(38,208,206,0.13);
+}
+.seat.booked {
+    background: #3a3a3a;
+    color: #bbb;
+    border-color: #444;
+    cursor: not-allowed;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+.legend {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #bbb;
+}
+.legend .seat {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 2px solid #263859;
+    background: #2b3a4a;
+}
+.legend .seat.selected {
+    background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+    border-color: #26d0ce;
+}
+.legend .seat.booked {
+    background: #3a3a3a;
+    border-color: #444;
+}
+.legend .seat.available {
+    background: #2b3a4a;
+    border-color: #263859;
+}
+</style>
+{% endblock %}

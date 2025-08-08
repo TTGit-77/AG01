@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section with CTA -->
+<div class="hero-section p-5 mb-5 rounded-4 text-white d-flex flex-column flex-md-row align-items-center justify-content-between" style="background: linear-gradient(100deg,#1a2980 10%,#26d0ce 90%); min-height: 320px;">
+  <div class="hero-text pe-md-5 mb-4 mb-md-0">
+    <h1 class="display-4 fw-bold mb-2" style="letter-spacing:1.5px;">Book Movie Tickets Instantly</h1>
+    <p class="lead mb-4" style="font-size:1.35rem;">Experience the latest blockbusters at your favorite cinemas. Fast, secure, and hassle-free ticket booking with CineBook.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-gradient btn-lg px-5 py-2 me-2 shadow-sm">Create Account</a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4 py-2">Login</a>
+  </div>
+  <div class="hero-graphic d-none d-md-block">
+    <img src="https://img.icons8.com/fluency/120/film-reel.png" alt="Movie Reel" style="filter: drop-shadow(0 4px 24px #26d0ce88);">
+  </div>
+</div>
+<!-- Trending Carousel -->
+<div class="container mb-5">
+  <div class="row mb-4">
+    <div class="col-12 d-flex align-items-center">
+      <h3 class="fw-bold me-3 mb-0" style="color:#1a2980;">Trending Movies</h3>
+      <span class="badge bg-gradient-primary" style="background:linear-gradient(90deg,#26d0ce,#1a2980);font-size:1rem;">Hot</span>
+    </div>
+  </div>
+  <div id="trendingCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for movie in movies[:3] %}
+      <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+        <div class="d-flex flex-row align-items-center justify-content-center">
+          <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="rounded-4 shadow-sm" style="height:220px;width:auto;object-fit:cover;background:#e3f0ff;">
+          <div class="ms-4">
+            <h4 class="fw-bold mb-1 text-gradient">{{ movie.title }}</h4>
+            <div class="mb-2 text-muted">{{ movie.genre }} &middot; {{ movie.release_year }}</div>
+            <a href="{{ url_for('movie_details', movie_id=movie.id) }}" class="btn btn-gradient btn-sm">Book Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#trendingCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#trendingCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+<!-- Advanced Search/Filter -->
+<div class="container mb-4">
+  <form method="GET" action="" class="row g-2 align-items-end justify-content-center">
+    <div class="col-md-4">
+      <input class="form-control" type="search" name="q" placeholder="Search movies by title, genre, year..." aria-label="Search">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="genre">
+        <option value="">All Genres</option>
+        <option>Sci-Fi</option>
+        <option>Action</option>
+        <option>Crime</option>
+        <option>Drama</option>
+        <option>Comedy</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="year">
+        <option value="">All Years</option>
+        {% for y in range(2025, 1989, -1) %}
+        <option>{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-gradient w-100" type="submit">Search</button>
+    </div>
+  </form>
+</div>
+<!-- Movie Grid -->
+<div class="row g-4">
+    {% for movie in movies %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card movie-card h-100 shadow-sm border-0">
+            <div class="position-relative">
+                <img src="{{ movie.poster_url }}" class="card-img-top movie-poster" alt="{{ movie.title }}" loading="lazy" style="background:#e3f0ff;object-fit:cover;min-height:240px;max-height:320px;">
+                <span class="badge bg-success position-absolute top-0 end-0 m-2" style="font-size:1rem;">★ {{ movie.rating }}</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title mb-1">{{ movie.title }}</h5>
+                <p class="card-text text-muted mb-2" style="font-size:0.95rem;">{{ movie.genre }} &middot; {{ movie.release_year }}</p>
+                <a href="{{ url_for('movie_details', movie_id=movie.id) }}" class="btn btn-gradient mt-auto w-100">Book Now</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-bg">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+      <div class="glass-card p-5 animate-fade-in">
+        <div class="text-center mb-4">
+          <img src="https://img.icons8.com/ios-filled/80/ffffff/mac-os.png" alt="Register" class="mb-3 auth-icon animate-bounce">
+          <h2 class="fw-bold mb-1" style="letter-spacing:1px;">Create your CineBook ID</h2>
+{# Optionally show: Create your CineBook ID, [username] #}
+          <p class="text-muted mb-0">Join the Movie Club!</p>
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-danger">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('register') }}">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control input-apple" id="username" name="username" required autofocus>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control input-apple" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-apple w-100 py-2">Create Account</button>
+        </form>
+        <div class="text-center mt-3">
+          <a href="{{ url_for('login') }}" class="link-apple">Already have an account? Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

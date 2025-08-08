@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-3">Manage Showtimes for <span class="text-info">{{ movie.title }}</span></h2>
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mb-3">&larr; Back to Dashboard</a>
+<div class="card bg-dark text-light shadow-sm mb-4">
+  <div class="card-body">
+    <form method="POST" class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control" name="show_date" required>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Time</label>
+        <input type="time" class="form-control" name="show_time" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Screen</label>
+        <input type="text" class="form-control" name="screen" required>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Total Seats</label>
+        <input type="number" class="form-control" name="total_seats" min="1" max="200" value="40" required>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-gradient w-100">Add Showtime</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="table-responsive">
+<table class="table table-dark table-striped align-middle">
+  <thead style="background:linear-gradient(90deg,#1a2980,#26d0ce);color:#fff;">
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Screen</th>
+      <th>Total Seats</th>
+      <th>Booked</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for show in showtimes %}
+    <tr>
+      <form method="POST" action="{{ url_for('admin_edit_showtime', showtime_id=show.id) }}">
+        <td><input type="date" class="form-control form-control-sm" name="show_date" value="{{ show.show_date }}" required></td>
+        <td><input type="time" class="form-control form-control-sm" name="show_time" value="{{ show.show_time }}" required></td>
+        <td><input type="text" class="form-control form-control-sm" name="screen" value="{{ show.screen }}" required></td>
+        <td><input type="number" class="form-control form-control-sm" name="total_seats" value="{{ show.total_seats }}" min="1" max="200" required></td>
+        <td>{{ show.booked_seats.split(',')|length if show.booked_seats else 0 }}</td>
+        <td>
+          <button type="submit" class="btn btn-sm btn-warning">Save</button>
+      </form>
+      <form method="POST" action="{{ url_for('admin_delete_showtime', showtime_id=show.id) }}" style="display:inline;">
+          <button type="submit" class="btn btn-sm btn-danger ms-1" onclick="return confirm('Delete this showtime?')">Delete</button>
+      </form>
+        </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
