@@ -23,6 +23,7 @@
         <table class="table table-dark table-striped table-hover align-middle rounded-3 overflow-hidden">
             <thead>
                 <tr style="background:linear-gradient(90deg,#1a2980,#26d0ce);color:#fff;">
+                    <th>Theatre</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Screen</th>
@@ -34,6 +35,7 @@
             <tbody>
                 {% for show in showtimes %}
                 <tr>
+                    <td><span class="badge bg-primary">{{ show.theatre.name if show.theatre else 'N/A' }}</span></td>
                     <td>{{ show.show_date }}</td>
                     <td>{{ show.show_time }}</td>
                     <td>{{ show.screen }}</td>
